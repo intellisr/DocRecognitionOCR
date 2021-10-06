@@ -31,13 +31,13 @@
     </div>
     <script type="text/javascript">
         const accountName = "intellisr2storage";
-        const sasString = "sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacuptfx&se=2021-10-01T19:55:01Z&st=2021-09-19T11:55:01Z&spr=https,http&sig=uheY7KKyNDIAcMyACZpV8eyJVj4esNY0beorbLl1XcE%3D";
+        const sasString = "sp=racwdl&st=2021-10-06T16:37:03Z&se=2021-12-01T00:37:03Z&sv=2020-08-04&sr=c&sig=09RMOFFBuuMXlZc24YRKwZtk54z4pY9o8%2BkitYrFZjw%3D";
         const containerName = "images";
         const containerURL = new azblob.ContainerURL(
             `https://${accountName}.blob.core.windows.net/${containerName}?${sasString}`,
         azblob.StorageURL.newPipeline(new azblob.AnonymousCredential));
 
-        const MODEL_URL="https://cdn.glitch.com/285c1aa6-a45e-47ab-9aa7-d8a80d8e766e%2Fmodel.json?v=1632656672768";
+        const MODEL_URL="https://cdn.glitch.me/fce7d000-fcaa-4574-b6b6-9d66062f49d1%2Fmodel.json?v=1633416801718";
 
         let imgElement = document.getElementById('imageSrc');
         let inputElement = document.getElementById('canvasInput');
@@ -178,10 +178,10 @@
                 console.log("Uploading files...");
                 const promises = [];
 
-                // const blockBlobURL = azblob.BlockBlobURL.fromContainerURL(containerURL, name);
-                // promises.push(azblob.uploadBrowserDataToBlockBlob(azblob.Aborter.none, inputElement.files[0], blockBlobURL,blobOptions));
+                const blockBlobURL = azblob.BlockBlobURL.fromContainerURL(containerURL, name);
+                promises.push(azblob.uploadBrowserDataToBlockBlob(azblob.Aborter.none, inputElement.files[0], blockBlobURL,blobOptions));
 
-                // await Promise.all(promises);
+                await Promise.all(promises);
                 console.log("Done.");
                 apiCall(name);
                 

@@ -100,9 +100,16 @@ def ocr(text_result,name):
         print(ocrData)                       
         return ocrData
     elif type=='drivinglicensefrontold':
+        ocrData={}
         for line in text_result:
                 print(line.text)
-        return 'drivinglicenseback'
+                first=line.text.split(":")[0]
+                if first=='DL No':
+                    ocrData["LID"]=line.text.split(":")[1]
+                elif first=='ID No':
+                    ocrData["NIC"]=line.text.split(":")[1]    
+        print(ocrData)                       
+        return ocrData
     elif type=='newnicfront':
         ocrData={}
         i=0
@@ -136,9 +143,14 @@ def ocr(text_result,name):
                 print(line.text)
         return 4
     elif type=='oldnicfront':
+        ocrData={}
         for line in text_result:
-                print(line.text)
-        return 5
+                matchNIC9 = re.findall(r'(\d{9})',line.text)
+                matchNIC12 = re.findall(r'(\d{12})',line.text)
+                if matchNIC9 or matchNIC12:
+                    ocrData["NIC"]=line.text
+        print(ocrData)             
+        return ocrData
     elif type=='oldnicback':
         #can be ignored
         for line in text_result:
