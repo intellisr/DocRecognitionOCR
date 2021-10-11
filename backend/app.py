@@ -42,14 +42,18 @@ def main():
 
     path=str(Path.cwd())+"/images/"+fileName
     # download an image for validation
-    urllib.request.urlretrieve(read_image_url,path)
+
+    #urllib.request.urlretrieve(read_image_url,path)
     #detectCorners(path)
 
     # Open the image
-    read_image = open(path, "rb")
+
+    #read_image = open(path, "rb")
 
     # Call API with image and raw response (allows you to get the operation location)
-    read_response = computervision_client.read_in_stream(read_image, raw=True)
+    
+    #read_response = computervision_client.read_in_stream(read_image, raw=True)
+    read_response = computervision_client.read(read_image_url,  raw=True)
 
     # Get the operation location (URL with an ID at the end) from the response
     read_operation_location = read_response.headers["Operation-Location"]
