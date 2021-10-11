@@ -75,6 +75,7 @@ def ocr(text_result,name):
         ocrData={}
         i=0
         for line in text_result:
+                print(line.text)
                 first=line.text.split(" ")[0]
                 i=i+1
                 if first=='5.':
@@ -157,9 +158,34 @@ def ocr(text_result,name):
                 print(line.text)
         return 'oldnicback'
     elif type=='passport':
+        ocrData={}
+        i=0
         for line in text_result:
                 print(line.text)
-        return 7
+                matchNIC = re.findall(r'[0-9]{5,15}[A-Z]{1}$',line.text)
+                passport = re.findall("PASSPORT",line.text)
+                detName = re.findall("<",line.text)
+                matchPassportNo = re.findall(r'^[A-Z]{1,2}[0-9]{7,10}$',line.text)
+                i=i+1
+                if matchNIC:
+                    ocrData["NIC"]=matchNIC[0]
+                    matchDOB = re.search(r'(\d+/\d+/\d+)',text_result[i-2].text)
+                    if matchDOB:
+                        ocrData["DOB"]=matchDOB.group(1)    
+                elif matchPassportNo:
+                    ocrData["passportNo"]=matchPassportNo[0]
+                elif detName:
+                    Names=line.text.split("<")
+                    name=""
+                    matchPassportNo2 = re.findall(r'^[A-Z]{1,2}[0-9]{7,10}$',Names[0])
+                    if matchPassportNo2:
+                        ocrData["passportNo2"]=Names[0]
+                    else:    
+                        for words in Names:
+                            name=name+" "+words
+                        ocrData["name"]=name                  
+        print(ocrData)                       
+        return ocrData
 
 def detectCorners(path):
     image = cv2.imread(path)
