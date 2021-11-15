@@ -3,22 +3,17 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
 from msrest.authentication import CognitiveServicesCredentials
 
-from array import array
-import os
-from PIL import Image
-import sys
+
 import time
 from flask_cors import CORS, cross_origin
-import urllib.request
 import json
 from flask import Flask, jsonify, request
 import cv2
-from pathlib import Path
 import re
 
 subscription_key = "8f6206b450a04b0ab2e9c700d1fc1247"
 endpoint = "https://intellsrvison.cognitiveservices.azure.com/"
-
+Image_container = "https://intellisr2storage.blob.core.windows.net/images/"
 ##FLASK FRAMEWORK
 app = Flask(__name__)
 
@@ -37,20 +32,7 @@ def main():
     computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
 
     # Get an image with text
-    #read_image_url = "https://intellisr2storage.blob.core.windows.net/images/documents_needed_au_student_visa_650x300.jpg"
-    read_image_url = "https://intellisr2storage.blob.core.windows.net/images/"+fileName
-
-    path=str(Path.cwd())+"/images/"+fileName
-    # download an image for validation
-
-    #urllib.request.urlretrieve(read_image_url,path)
-    #detectCorners(path)
-
-    # Open the image
-
-    #read_image = open(path, "rb")
-
-    # Call API with image and raw response (allows you to get the operation location)
+    read_image_url = Image_container+fileName
     
     #read_response = computervision_client.read_in_stream(read_image, raw=True)
     read_response = computervision_client.read(read_image_url,  raw=True)
