@@ -62,12 +62,12 @@
             if(std.data64F[0] > 8){
                 document.getElementById("p2").innerHTML = "Not blur";
                 predict(imgElement);
+                //faceDetect();
                 //getContour();
                 
             }else{
                 document.getElementById("p2").innerHTML = "blur";
             }
-            //cv.imshow('canvasOutput', dst);
             src.delete(); dst.delete(); 
 
         };
@@ -213,7 +213,33 @@
 
         }
 
+        const faceDetect=()=>{
+            let src = cv.imread(imgElement);
+            let gray = new cv.Mat();
+            cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+            let faces = new cv.RectVector();
+            let eyes = new cv.RectVector();
+            let faceCascade = new cv.CascadeClassifier();
+            // load pre-trained classifiers
+            faceCascade.load('haarcascade_frontalface_default.xml');
+            // detect faces
+            let msize = new cv.Size(0, 0);
 
+            // try to change scaleFactor  and minNeighbors values
+            faceCascade.detectMultiScale(gray, faces,1.05,0);
+            for (let i = 0; i < faces.size(); ++i) {
+                let roiGray = gray.roi(faces.get(i));
+                let roiSrc = src.roi(faces.get(i));
+                let point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
+                let point2 = new cv.Point(faces.get(i).x + faces.get(i).width,
+                                        faces.get(i).y + faces.get(i).height);
+                cv.rectangle(src, point1, point2, [255, 0, 0, 255]);
+                roiGray.delete(); roiSrc.delete();
+            }
+            cv.imshow('canvasOutput', src);
+            src.delete(); gray.delete(); faceCascade.delete();
+            faces.delete(); eyes.delete();
+        }
 
 
     </script>

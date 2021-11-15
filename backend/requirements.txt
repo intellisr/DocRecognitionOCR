@@ -1,0 +1,5 @@
+azure_storage==0.37.0
+Flask==1.1.2
+Flask_Cors==3.0.10
+msrest==0.6.21
+opencv_python==4.5.1.48
